@@ -65,7 +65,7 @@ namespace GuessGame.Board
         {
             var dif = Math.Abs(_weight - guess);
             player.RoundsToSkip = (dif / 10) - 1;
-            if (Math.Abs(_weight - guess) < _closestAttempt.guess)
+            if (dif < Math.Abs(_weight - _closestAttempt.guess))
             {
                 _closestAttempt = (guess, player.Name);
             }
@@ -89,7 +89,7 @@ namespace GuessGame.Board
             _attemptsCount = 100;
             var random = new Random();
             _weight = random.Next(Globals.WeightRange.from, Globals.WeightRange.to);
-            _closestAttempt = (Globals.WeightRange.to * -1, string.Empty);
+            _closestAttempt = (Globals.WeightRange.to, string.Empty);
 
             // The order in which players make their guesses is calculated randomly in each game.
             Shuffle();
