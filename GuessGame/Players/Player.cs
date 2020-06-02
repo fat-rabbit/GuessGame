@@ -4,7 +4,6 @@ namespace GuessGame.Players
 {
     public abstract class Player
     {
-        public int AttemptsAmount { get; private set; }
         public readonly string Name;
         public int RoundsToSkip;
 
@@ -13,8 +12,10 @@ namespace GuessGame.Players
             Name = name;
         }
 
+        public int AttemptsAmount { get; private set; }
+
         /// <summary>
-        /// returns -1 in case if current round is skipped
+        ///     returns -1 in case if current round is skipped
         /// </summary>
         /// <returns></returns>
         public int MakesAMove()

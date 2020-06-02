@@ -5,9 +5,9 @@ using GuessGame.Players;
 
 namespace GuessGame
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             var players = InputPlayers();
             var x = new Board.Board(players);
@@ -39,16 +39,14 @@ namespace GuessGame
                 while (true)
                 {
                     var typeString = Console.ReadLine();
-                    
-                    if (typeString != null && int.TryParse(typeString, out int enumVal))
-                    {
+
+                    if (typeString != null && int.TryParse(typeString, out var enumVal))
                         if (Enum.IsDefined(typeof(PlayerType), enumVal))
                         {
                             type = (PlayerType) enumVal;
                             break;
                         }
-                    }
-                    
+
                     Console.WriteLine("Number is incorrect. Try again");
                 }
 
@@ -64,26 +62,26 @@ namespace GuessGame
             var values = Enum.GetValues(enumType);
             var result = new StringBuilder();
 
-            foreach (PlayerType val in values)
-            {
-                result.AppendLine($"{(int) val}: {val}");
-            }
+            foreach (PlayerType val in values) result.AppendLine($"{(int) val}: {val}");
 
             return result.ToString();
         }
 
 
-        private static int Parse(string input) => input switch
+        private static int Parse(string input)
         {
-            "1" => 1,
-            "2" => 2,
-            "3" => 3,
-            "4" => 4,
-            "5" => 5,
-            "6" => 6,
-            "7" => 7,
-            "8" => 8,
-            _ => -1
-        };
+            return input switch
+            {
+                "1" => 1,
+                "2" => 2,
+                "3" => 3,
+                "4" => 4,
+                "5" => 5,
+                "6" => 6,
+                "7" => 7,
+                "8" => 8,
+                _ => -1
+            };
+        }
     }
 }

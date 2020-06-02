@@ -6,11 +6,11 @@ namespace GuessGame.Board
 {
     public class Board
     {
-        private int _weight;
+        private readonly List<IObserver<MoveEvent>> _observers;
+        private readonly IList<Player> _players;
         private int _attemptsCount = 100;
         private (int guess, string playerName) _closestAttempt;
-        private readonly IList<Player> _players;
-        private readonly List<IObserver<MoveEvent>> _observers;
+        private int _weight;
 
         public Board(IList<(string, PlayerType)> players)
         {
@@ -20,10 +20,7 @@ namespace GuessGame.Board
             foreach (var (playerName, playerType) in players)
             {
                 var player = PlayerFactory.GetPlayer(playerType, playerName);
-                if (player is IObserver<MoveEvent> smartPlayer)
-                {
-                    _observers.Add(smartPlayer);
-                }
+                if (player is IObserver<MoveEvent> smartPlayer) _observers.Add(smartPlayer);
 
                 _players.Add(player);
             }
@@ -35,7 +32,6 @@ namespace GuessGame.Board
             Console.WriteLine($"Basket with fruits weights {_weight} kilos");
 
             while (true)
-            {
                 foreach (var player in _players)
                 {
                     var guess = player.MakesAMove();
@@ -58,27 +54,26 @@ namespace GuessGame.Board
                         return;
                     }
                 }
-            }
         }
 
         private void ProcessAttempt(int guess, Player player)
         {
             var dif = Math.Abs(_weight - guess);
-            player.RoundsToSkip = (dif / 10) - 1;
-            if (dif < Math.Abs(_weight - _closestAttempt.guess))
-            {
-                _closestAttempt = (guess, player.Name);
-            }
+            player.RoundsToSkip = dif / 10 - 1;
+            if (dif < Math.Abs(_weight - _closestAttempt.guess)) _closestAttempt = (guess, player.Name);
 
             ShareAttempt(guess);
         }
 
         private void ShareAttempt(int attempt)
         {
-            foreach (var observer in _observers)
-            {
-                observer.OnNext(new MoveEvent(attempt));
-            }
+            foreach (var observer in _observers) observer.OnNext(new MoveEvent(attempt));
+        }
+
+        public void Clean()
+        {
+            _players.Clear();
+            _observers.Clear();
         }
 
 
@@ -118,16 +113,10 @@ namespace GuessGame.Board
 
         private void GameTookTooLong()
         {
-            Console.Write($"Amount of guesses reached 100. " +
+            Console.Write("Amount of guesses reached 100. " +
                           $"The closest assumption, that has been made by {_closestAttempt.playerName}, is {_closestAttempt.guess}");
         }
 
         #endregion
-
-        public void Clean()
-        {
-            _players.Clear();
-            _observers.Clear();
-        }
     }
 }
