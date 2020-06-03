@@ -1,11 +1,11 @@
 using System;
-using GuessGame.Board;
+using GuessGame.Game;
 
 namespace GuessGame.Players.MemoriesTactics
 {
     public class MemoryOthers : MemoryTactic, IObserver<MoveEvent>
     {
-        public MemoryOthers(Player player) : base(player)
+        public MemoryOthers(IPlayer player) : base(player)
         {
         }
 
@@ -22,16 +22,6 @@ namespace GuessGame.Players.MemoriesTactics
         public void OnNext(MoveEvent ev)
         {
             Attempts.Add(ev.Attempt);
-        }
-
-        public override int Guess()
-        {
-            var result = BasicPlayer.Guess();
-
-            while (Attempts.Contains(result))
-                result = BasicPlayer.Guess();
-
-            return result;
         }
     }
 }

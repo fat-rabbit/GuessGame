@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using GuessGame.Game;
 using GuessGame.Players;
 
 namespace GuessGame
 {
-    internal class Program
+    internal static class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
             var players = InputPlayers();
-            var x = new Board.Board(players);
-            x.Play();
+            var game = new Board(players);
+            await game.PlayAsync();
+            Console.WriteLine(game.GameResult);
         }
 
-        private static List<(string, PlayerType)> InputPlayers()
+        private static IEnumerable<(string, PlayerType)> InputPlayers()
         {
             Console.WriteLine("Enter amount of players");
             var playersNumberString = Console.ReadLine();

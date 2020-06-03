@@ -33,7 +33,7 @@ namespace GuessGame.Players
 
     public static class PlayerFactory
     {
-        public static Player GetPlayer(PlayerType type, string name)
+        public static IPlayer GetPlayer(PlayerType type, string name)
         {
             switch (type)
             {

@@ -1,4 +1,4 @@
-namespace GuessGame.Board
+namespace GuessGame.Game
 {
     public class MoveEvent
     {
